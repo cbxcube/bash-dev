@@ -11,12 +11,15 @@ TBD: list all *.sh files here
 TBD: list all *.cpp files here 
  
  
-## Projects:
-- minute_test.sh
-- cronmon.sh
-- upgradescr.sh
-- functions.sh
-- C++: hello.cpp
+## Projects:psmontx.sh
+- psmontx.sh - provide PID and get PID's performance from top to log file
+- minute_test.sh - TOBEDECOMISSIONED - testing for cronmon.sh
+- cronmon.sh - monitoring cron jobs
+- upgradescr.sh - WHITEPAPER - for using script cmd - capturing all what is printed on stdo
+- functions.sh - various functions 
+
+- C++: 
+- hello.cpp - C++ basic Hello World stuff
 
 
 
