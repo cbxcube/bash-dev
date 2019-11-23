@@ -47,6 +47,11 @@ search2
 printf "\n\n"
 
 # Checksum of files
+# the goal here is this:-------------------------
+# sudo md5sum $(find .) 2>/dev/null > /tmp/hash_a.txt
+# sudo md5sum $(find /tmp) 2>/dev/null > /tmp/hash_b.txt
+
+
 chsm1() {
 	touch $hashfile1
 	for line in $(cat $tmpfile1 ); do
@@ -56,6 +61,8 @@ chsm1() {
 
 chsm1
 printf "\n\n"
+
+# checksum 2 should be coppied according checksum 1
 
 # Printing hashes of all files in directories:
 printf "\n\n"
@@ -68,11 +75,12 @@ printf "\n\n"
 
 ### EVALUATE DIFFERENCES: 
 # DIFF 2 files
-
+# the goal here is this:-------------------------
+# diff  /tmp/hash_a.txt /tmp/hash_b.txt
 
 
 
 # Wiping tmp files
-sudo rm $tmpfile1 $tmpfile2 $hashfile1 $hashfile2
+rm $tmpfile1 $tmpfile2 $hashfile1 $hashfile2
 
 exit 0
