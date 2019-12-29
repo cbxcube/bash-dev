@@ -33,7 +33,7 @@ get_duplist() {
 }
 
 get_duplsout() {
-	printf "================================================================\n"
+	printf "\n================================================================\n"
 	printf "   List of identified duplicates in $folder\n"
 	printf "================================================================\n"
 	#for i in $(cat $listdupnr|awk '{print $2}'); do grep "$i" $listmd5cs; done |awk '{print $2}' > $listdupls
@@ -41,11 +41,15 @@ get_duplsout() {
 	#awk '{print $2}' $listdupnr |while read line; do grep "$line" $listmd5cs; done |awk '{print $2}' > $listdupls
 	awk '{print $2}' $listdupnr |while read line; do grep "$line" $listmd5cs |awk '{print $2}' > $listdupls; done
 	#for i in "$(cat $listdupls)"; do ls -lh "$i"; done;
-	cat $listdupls |while read line; do ls -lh $(grep "$i" $listmd5cs| awk '{print $2}'); done
+	if [ -e $listdupls ]; then
+		cat $listdupls |while read line; do ls -lh $(grep "$line" $listmd5cs| awk '{print $2}'); done
+	else
+		printf "   No duplicates detected in this folder. Exiting...\n"
+	fi
 }
 
 cleanup() {
-	rm $listfiles $listmd5cs $listdupnr $listdupls
+	rm $listfiles $listmd5cs $listdupnr $listdupls 2>/dev/null
 }
 
 # RUNTIME:
@@ -67,13 +71,18 @@ printf "================================================================\n"
 	
 ### Check if all files has been uniq. if yes exit, if no list duplicates.
 
-if [ "$(wc -l < $listfiles)" -eq "$(wc -l < $listdupls)" ]; then
-	printf "   No duplicates detected\n"
+if [ -e $listdupls ]; then
+       if [ "$(wc -l < $listfiles)" -eq "$(wc -l < $listdupls)" ]; then
+		printf "   No duplicates detected\n"
+       else
+		printf "   Duplicate files has been found. Exiting the program.\n\n"
+       fi
 else
-	printf "   Duplicate files has been found. Exiting the program.\n"
+ 	printf " \n"
 fi
 
+
 # Clean temporary files
-#cleanup
+cleanup
 
 exit 0
