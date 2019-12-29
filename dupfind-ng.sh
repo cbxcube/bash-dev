@@ -38,8 +38,10 @@ get_duplsout() {
 	printf "================================================================\n"
 	#for i in $(cat $listdupnr|awk '{print $2}'); do grep "$i" $listmd5cs; done |awk '{print $2}' > $listdupls
 	#cat $listdupnr|awk '{print $2}'|while read line; do grep "$i" $listmd5cs; done |awk '{print $2}' > $listdupls
-	awk '{print $2}' $listdupnr |while read line; do grep "$line" $listmd5cs; done |awk '{print $2}' > $listdupls
-	for i in "$(cat $listdupls)"; do ls -lh "$i"; done;
+	#awk '{print $2}' $listdupnr |while read line; do grep "$line" $listmd5cs; done |awk '{print $2}' > $listdupls
+	awk '{print $2}' $listdupnr |while read line; do grep "$line" $listmd5cs |awk '{print $2}' > $listdupls; done
+	#for i in "$(cat $listdupls)"; do ls -lh "$i"; done;
+	cat $listdupls |while read line; do ls -lh $(grep "$i" $listmd5cs| awk '{print $2}'); done
 }
 
 cleanup() {
@@ -47,6 +49,13 @@ cleanup() {
 }
 
 # RUNTIME:
+#cat $listfiles
+#cat $listmd5cs
+#cat $listdupnr
+#cat $listdupls
+
+
+
 
 get_file_list
 get_md5sum
