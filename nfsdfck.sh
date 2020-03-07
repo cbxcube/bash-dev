@@ -18,6 +18,7 @@ if [ "`id -u`" -eq 0 ]; then
   	echo "	OK: Running as Superuser."
 else
   	echo "	ERROR: Need to run as root! Exiting..."
+	banner
   	exit 1
 fi
 
@@ -27,7 +28,8 @@ if  df|grep ":" > /dev/null; then
 	echo "	OK: NFS mount(s) detected." 
 	isnfs=yes
 else
-	echo "	ERROR: No NFS mount(s) detected. Exiting..."	
+	echo "	ERROR: No NFS mount(s) detected. Exiting..."
+	banner
 	isnfs=no
 	exit 1
 fi
