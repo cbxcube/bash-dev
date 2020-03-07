@@ -6,7 +6,7 @@
 
 
 # Get scripts PID:
-runpid="echo $$"
+runpid=$(echo $$)
 
 # Variables:
 path=/sbin:/bin:/usr/sbin:/usr/bin
@@ -43,6 +43,8 @@ mklockf() {
 	fi
 }
 
+# Generate main runtime lock:
+mklockf 0
 
 # Prerequisites check:
 test -f $destin || echo "" && echo "ERROR: Prerequisites check failure - Destination path not created. Exiting..." && exit 0
@@ -54,9 +56,7 @@ if [ -r $respf ]; then
 	. $respf
 fi
 
-# RCS variables:
-
-
+# RCS variables for log management
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
 
