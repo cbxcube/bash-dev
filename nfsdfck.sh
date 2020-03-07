@@ -3,17 +3,31 @@
 # This script will check utilisation of NFS mounted filesystems
 # Cubic 2020
 
+# Banner
+banner() {
+	echo "=============================================================================================="
+}
+
 # Print header
 clear
 echo ""
-echo "=============================================================================================="
+banner
 
-# Verification: check if ":" in column 1. If yes=nfsmounts available 
+# Verification: uid
+if [ "`id -u`" -eq 0 ]; then
+  	echo "	OK: Running as Superuser."
+else
+  	echo "	ERROR: Need to run as root! Exiting..."
+  	exit 1
+fi
+
+
+# "Verification: If yes=nfsmounts available 
 if  df|grep ":" > /dev/null; then
-	echo "	NFS mount points detected." 
+	echo "	OK: NFS mount(s) detected." 
 	isnfs=yes
 else
-	echo "No NFS mount points detected. Exiting..."	
+	echo "	ERROR: No NFS mount(s) detected. Exiting..."	
 	isnfs=no
 	exit 1
 fi
@@ -25,9 +39,10 @@ nfsfslist=$(mount |grep nfs  |awk '{print$3}')
 rundfcheck=$(for i in echo $nfsfslist; do df -h |grep $i; done)
 
 
-echo "=============================================================================================="
-echo "	List of NFS mountpoints on $(hostname)"
-echo ""
+banner
+echo "List of NFS mount(s) on $(hostname)"
+banner
 echo "$rundfcheck"
+banner
 
 exit 0
