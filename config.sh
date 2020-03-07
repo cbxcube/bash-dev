@@ -1,6 +1,9 @@
 #! /usr/bin/env bash
 #
 # Configure service with response file
+#
+# CREATED ON SAMPLE OF bash-dev/initd/ptunnel-init.d-sample-shellscript
+
 
 # Get scripts PID:
 runpid="echo $$"
@@ -17,6 +20,11 @@ destin=/tmp/sample
 respf=~/configsh.conf
 
 default_run=installation
+# TODO: understand the meaning of "-daemon"
+#options="-daemon $default_run ${password:+-x $password}"
+# should it be the "--startas" parameter from "case" below?
+#options="-startas $default_run ${password:+-x $password}"
+
 
 # Banner:
 banner() {
@@ -46,6 +54,17 @@ if [ -r $respf ]; then
 	. $respf
 fi
 
+# RCS variables:
+
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+. /lib/lsb/init-functions
+
+
+
 
 # Operations:
 startinst() {
@@ -74,11 +93,11 @@ startinst() {
 
 	installation --start --quiet \
 		--destination $destin --swname $swname --startas $default_run \
-		-- $OPTIONS \
+		-- $options \
 		|| return 2
 }
 
-configureinst(){
+startconf(){
 
 	if [ -r $lockfile2 != "true" ]; then
 		return 0
@@ -106,15 +125,16 @@ configureinst(){
 
 # Case:
 case "$1" in
-  installation)
+  install)
 	echo "Starting installation"
+	
 	#if [ "$run_daemon" != "true" ]; then
 	#	log_warning_msg "To run the ptunnel daemon, please set run_daemon to 'true' in /etc/default/ptunnel "
 	#	log_end_msg 0
 	#	exit 0
 	#fi
 	#[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
-	#do_start
+	startinst
 	#case "$?" in
 	#	0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
 	#	2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
@@ -123,8 +143,9 @@ case "$1" in
 
 	#
 
-  configuration)
+  configure)
 	  echo ""
+	  startconf
 	  ;;
 
 
