@@ -1,0 +1,2 @@
+creating /usr/local/modules/python27/lib/python2.7/site-packages/fail2ban
+error: could not create '/usr/local/modules/python27/lib/python2.7/site-packages/fail2ban': Read-only file system
