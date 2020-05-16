@@ -83,15 +83,25 @@ search-omitted() {
 
 removespaces() {
 
+    echo "Duplicates detected...................................."
+    echo ""
     while IFS= read -r line; do
 	    printf '%q\n' "$line"
+    done < $resultsfile
+
+    while IFS= read -r line; do
+	    ls -l "$line"
+    done < $resultsfile
+
+    while IFS= read -r line; do
+            /usr/bin/md5sum "$line"
     done < $resultsfile
 }
 
 # executing
 createresults
 search
-search-ommited
+search-omitted
 removespaces
 
 exit 0
