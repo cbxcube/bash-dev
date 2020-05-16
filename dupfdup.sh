@@ -3,12 +3,14 @@
 
 targetdir=$1
 spacebefore=$(du -xms $targetdir)
-resultsfile=$targetdir$targetdir_duplicates-all.txt
-resultsfileomitted=$targetdir$targetdir_duplicates-ommited.txt
+resultsfile=$targetdir$targetdir_duplicates-DUPLICATES_all.txt
+resultsfileomitted=$targetdir$targetdir_duplicates-DUPLICATES_onlyommited.txt
 
 if [ $# -gt 0 ]; then
-	echo "Starting to look for duplicates in directory: $targetdir - $(date)."
-	echo "Size of target: $targetdir - $spacebefore."
+	echo "Duplfinder started................................................................. Date: $(date)."
+	echo "Starting to look for duplicates in directory: $targetdir." 
+	echo "Size of target: $spacebefore."
+	echo "............................................................................................................"
 else
 	echo "Target directory for duplicate search not provided. Exiting..."
 	exit 1
@@ -25,21 +27,24 @@ fi
 
 
 
-
 createresults() {
 
 	if	[ -f  $resultsfile ]; then
-		resultsfile2="~$targetdir_duplicates-all.txt"
+		resultsfile2=~$targetdir_duplicates-DUPLICATES2-all.txt
 		echo "File for duplicates result $resultsfile2 already exist."
 		echo "Creating Result file in user's home $resultsfile2"
 		touch $resultsfile2
 		ls -l $resultsfile2
+		echo "Duplicates will be listed in file: $resultsfile2." 
+	        echo ""	
 		resultsfile=$resultsfile2
 
 	elif 	[ ! -f $resultsfile ]; then
+		echo "File for duplicates result $resultsfile created."
 		touch $resultsfile 
 		ls -l $resultsfile 
 		echo "Duplicates will be listed in file: $resultsfile." 
+		echo ""
 
 	else
 		echo "Failed to create the file: $resultsfile"
@@ -86,22 +91,40 @@ removespaces() {
     echo "Duplicates detected...................................."
     echo ""
     while IFS= read -r line; do
-	    printf '%q\n' "$line"
+	    printf '%q\n' "$line"|grep -v "^''" 
     done < $resultsfile
+    echo ""
 
     while IFS= read -r line; do
-	    ls -l "$line"
+	    ls -l "$line" 2>/dev/null 
     done < $resultsfile
+    echo ""
 
     while IFS= read -r line; do
-            /usr/bin/md5sum "$line"
+            /usr/bin/md5sum "$line" 2>/dev/null 
     done < $resultsfile
+    echo ""
 }
+
+
+todelete() {
+
+    echo "======================================================================"
+    echo "RESULTS: Duplicates safe to delete...................................."
+    echo ""
+    while IFS= read -r line; do
+	    printf '%q\n' "$line"|grep -v "^''" 
+    done < $resultsfileomitted
+    echo "......................................................................"
+    echo "======================================================================"
+}
+
 
 # executing
 createresults
 search
 search-omitted
 removespaces
+todelete
 
 exit 0
