@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # find duplicates using fdupe binary
 
-targetdir=$1
+targetdir="$1"
 spacebefore=$(du -xms $targetdir)
 resultsfile=$targetdir$targetdir_duplicates-DUPLICATES_all.txt
 resultsfileomitted=$targetdir$targetdir_duplicates-DUPLICATES_onlyommited.txt
@@ -29,20 +29,20 @@ fi
 
 createresults() {
 
-	if	[ -f  $resultsfile ]; then
-		resultsfile2=~$targetdir_duplicates-DUPLICATES2-all.txt
+	if	[ -e  $resultsfile ]; then
+		resultsfile2=/tmp/$targetdir_duplicates-DUPLICATES2-all.txt
 		echo "File for duplicates result $resultsfile2 already exist."
 		echo "Creating Result file in user's home $resultsfile2"
-		touch $resultsfile2
-		ls -l $resultsfile2
+		touch "$resultsfile2"
+		ls -l "$resultsfile2"
 		echo "Duplicates will be listed in file: $resultsfile2." 
 	        echo ""	
 		resultsfile=$resultsfile2
 
 	elif 	[ ! -f $resultsfile ]; then
 		echo "File for duplicates result $resultsfile created."
-		touch $resultsfile 
-		ls -l $resultsfile 
+		touch "$resultsfile" 
+		ls -l "$resultsfile"
 		echo "Duplicates will be listed in file: $resultsfile." 
 		echo ""
 
