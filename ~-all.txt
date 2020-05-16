@@ -1,0 +1,8 @@
+/tmp/wine-yLpiFP/server-fe01-120750/lock
+/tmp/!
+/tmp/@
+/tmp/#
+/tmp/$
+/tmp/%
+/tmp/^
+
